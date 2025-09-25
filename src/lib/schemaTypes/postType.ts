@@ -19,9 +19,11 @@ export const postType = defineType({
       },
     }),
     defineField({
-      name: 'author',
-      type: 'reference',
-      to: [{ type: 'author' }], // ✅ FIXED: `to` must be an array
+      ...( {
+        name: 'author',
+        type: 'reference',
+        to: [{ type: 'author' }],
+      } as any),
     }),
     defineField({
       name: 'mainImage',
@@ -42,8 +44,10 @@ export const postType = defineType({
       type: 'array',
       of: [
         defineArrayMember({
-          type: 'reference',
-          to: [{ type: 'category' }], // ✅ FIXED: `to` must be an array
+          ...( {
+            type: 'reference',
+            to: [{ type: 'category' }],
+          } as any),
         }),
       ],
     }),
