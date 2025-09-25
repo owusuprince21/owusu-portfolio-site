@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-export const revalidate = 600 // revalidate every 10 minutes
+export const revalidate = 600 // revalidate every 6 minutes
 
 type GuardianResult = {
   id: string
@@ -43,14 +43,13 @@ async function getNews(page = 1): Promise<GuardianResponse> {
   return res.json()
 }
 
-export default async function BlogPage({
-  searchParams,
-}: {
+interface BlogPageProps {
   searchParams?: { [key: string]: string | string[] | undefined }
-}) {
-  // Safely extract `page` from searchParams
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
   const pageParam = Array.isArray(searchParams?.page)
-    ? searchParams?.page[0]
+    ? searchParams.page[0]
     : searchParams?.page
 
   const page = Number(pageParam ?? "1") || 1
