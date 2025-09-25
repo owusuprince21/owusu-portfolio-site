@@ -1,6 +1,8 @@
 import {UserIcon} from '@sanity/icons'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+
+
 export const authorType = defineType({
   name: 'author',
   title: 'Author',
@@ -25,17 +27,19 @@ export const authorType = defineType({
         hotspot: true,
       },
     }),
-    defineField({
-      name: 'bio',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'block',
-          styles: [{title: 'Normal', value: 'normal'}],
-          lists: [],
-        }),
-      ],
-    }),
+defineField({
+  name: 'bio',
+  title: 'Biography',
+  type: 'array',
+  of: [
+    {
+      type: 'block',
+      styles: [{ title: 'Normal', value: 'normal' }],
+      lists: [],
+    },
+  ],
+}),
+
   ],
   preview: {
     select: {
