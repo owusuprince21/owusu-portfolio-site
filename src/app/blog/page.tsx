@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from "next/image"
+import Link from "next/link"
 
 export const revalidate = 600 // revalidate every 10 minutes
 
@@ -26,28 +26,35 @@ type GuardianResponse = {
 }
 
 function stripHtml(s?: string) {
-  return (s ?? '').replace(/<[^>]*>?/gm, '')
+  return (s ?? "").replace(/<[^>]*>?/gm, "")
 }
 
 async function getNews(page = 1): Promise<GuardianResponse> {
-  const url = new URL('https://content.guardianapis.com/search')
-  url.searchParams.set('section', 'world')
-  url.searchParams.set('order-by', 'newest')
-  url.searchParams.set('page-size', '12')
-  url.searchParams.set('page', String(page))
-  url.searchParams.set('show-fields', 'trailText,thumbnail,byline')
-  url.searchParams.set('api-key', process.env.GUARDIAN_API_KEY!)
+  const url = new URL("https://content.guardianapis.com/search")
+  url.searchParams.set("section", "world")
+  url.searchParams.set("order-by", "newest")
+  url.searchParams.set("page-size", "12")
+  url.searchParams.set("page", String(page))
+  url.searchParams.set("show-fields", "trailText,thumbnail,byline")
+  url.searchParams.set("api-key", process.env.GUARDIAN_API_KEY!)
+
   const res = await fetch(url.toString(), { next: { revalidate } })
-  if (!res.ok) throw new Error('Failed to fetch news')
+  if (!res.ok) throw new Error("Failed to fetch news")
   return res.json()
 }
 
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams?: { page?: string }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }) {
-  const page = Number(searchParams?.page ?? '1') || 1
+  // Safely extract `page` from searchParams
+  const pageParam = Array.isArray(searchParams?.page)
+    ? searchParams?.page[0]
+    : searchParams?.page
+
+  const page = Number(pageParam ?? "1") || 1
+
   const data = await getNews(page)
   const { results, pages } = data.response
 
@@ -84,10 +91,12 @@ export default async function BlogPage({
               </p>
 
               <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
-                <span>{new Intl.DateTimeFormat('en', {
-                  dateStyle: 'medium',
-                  timeStyle: 'short'
-                }).format(new Date(a.webPublicationDate))}</span>
+                <span>
+                  {new Intl.DateTimeFormat("en", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  }).format(new Date(a.webPublicationDate))}
+                </span>
                 <span>{a.sectionName}</span>
               </div>
 
@@ -111,9 +120,7 @@ export default async function BlogPage({
         <Link
           href={`/blog?page=${Math.max(1, page - 1)}`}
           className={`px-4 py-2 rounded-full border ${
-            page <= 1
-              ? 'opacity-50 pointer-events-none'
-              : 'hover:bg-white/10'
+            page <= 1 ? "opacity-50 pointer-events-none" : "hover:bg-white/10"
           }`}
         >
           ← Newer
@@ -125,8 +132,8 @@ export default async function BlogPage({
           href={`/blog?page=${Math.min(pages, page + 1)}`}
           className={`px-4 py-2 rounded-full border ${
             page >= pages
-              ? 'opacity-50 pointer-events-none'
-              : 'hover:bg-white/10'
+              ? "opacity-50 pointer-events-none"
+              : "hover:bg-white/10"
           }`}
         >
           Older →
