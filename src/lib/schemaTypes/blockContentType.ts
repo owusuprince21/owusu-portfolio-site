@@ -1,3 +1,5 @@
+// ./src/lib/schemaTypes/blockContentType.ts
+
 import { defineType, defineArrayMember } from 'sanity'
 import { ImageIcon } from '@sanity/icons'
 
@@ -7,7 +9,6 @@ export const blockContentType = defineType({
   type: 'array',
   of: [
     defineArrayMember({
-      // ✅ TypeScript-safe workaround using `as any`
       ...( {
         type: 'block',
         styles: [
@@ -18,40 +19,44 @@ export const blockContentType = defineType({
           { title: 'H4', value: 'h4' },
           { title: 'Quote', value: 'blockquote' },
         ],
-        lists: [{ title: 'Bullet', value: 'bullet' }],
-marks: {
-  decorators: [
-    { title: 'Strong', value: 'strong' },
-    { title: 'Emphasis', value: 'em' },
-  ],
-  annotations: [
-    {
-      title: 'URL',
-      name: 'link',
-      type: 'object',
-      fields: [
-        {
-          title: 'URL',
-          name: 'href',
-          type: 'url',
+        lists: [
+          { title: 'Bullet', value: 'bullet' },
+        ],
+        marks: {
+          decorators: [
+            { title: 'Strong', value: 'strong' },
+            { title: 'Emphasis', value: 'em' },
+          ],
+          annotations: [
+            {
+              title: 'URL',
+              name: 'link',
+              type: 'object',
+              fields: [
+                {
+                  title: 'URL',
+                  name: 'href',
+                  type: 'url',
+                },
+              ],
+            },
+          ],
         },
-      ],
-    },
-  ],
-},
       } as any),
     }),
     defineArrayMember({
-      type: 'image',
-      icon: ImageIcon,
-      options: { hotspot: true },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-        },
-      ],
+      ...( {
+        type: 'image',
+        icon: ImageIcon,
+        options: { hotspot: true },
+        fields: [
+          {
+            name: 'alt',
+            type: 'string',
+            title: 'Alternative Text',
+          },
+        ],
+      } as any),
     }),
   ],
 })
