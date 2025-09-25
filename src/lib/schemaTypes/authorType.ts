@@ -1,5 +1,5 @@
 import { UserIcon } from '@sanity/icons'
-import { defineType, defineField, defineArrayMember } from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export const authorType = defineType({
   name: 'author',
@@ -34,11 +34,11 @@ export const authorType = defineType({
       title: 'Biography',
       type: 'array',
       of: [
-        defineArrayMember({
+        {
           type: 'block',
           styles: [{ title: 'Normal', value: 'normal' }],
           lists: [],
-        }),
+        },
       ],
     }),
   ],
