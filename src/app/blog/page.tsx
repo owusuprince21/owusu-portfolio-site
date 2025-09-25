@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-export const revalidate = 600 // revalidate every 6 minutes
+export const revalidate = 600 // revalidate every 10 minutes
 
 type GuardianResult = {
   id: string
@@ -43,11 +43,10 @@ async function getNews(page = 1): Promise<GuardianResponse> {
   return res.json()
 }
 
-interface BlogPageProps {
-  searchParams?: { [key: string]: string | string[] | undefined }
-}
-
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+// ✅ Let Next.js infer the props type
+export default async function BlogPage({ searchParams }: {
+  searchParams?: Record<string, string | string[]>
+}) {
   const pageParam = Array.isArray(searchParams?.page)
     ? searchParams.page[0]
     : searchParams?.page
@@ -64,7 +63,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <p className="text-gray-400 mt-2">Latest from The Guardian</p>
       </header>
 
-      {/* Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map((a) => (
           <article
@@ -114,7 +112,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         ))}
       </div>
 
-      {/* Pagination */}
       <div className="flex items-center justify-center gap-3 mt-10">
         <Link
           href={`/blog?page=${Math.max(1, page - 1)}`}
