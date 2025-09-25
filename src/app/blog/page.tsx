@@ -43,10 +43,7 @@ async function getNews(page = 1): Promise<GuardianResponse> {
   return res.json()
 }
 
-// ✅ Let Next.js infer the props type
-export default async function BlogPage({ searchParams }: {
-  searchParams?: Record<string, string | string[]>
-}) {
+export default async function BlogPage({ searchParams }: any) {
   const pageParam = Array.isArray(searchParams?.page)
     ? searchParams.page[0]
     : searchParams?.page
