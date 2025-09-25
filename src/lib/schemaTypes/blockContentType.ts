@@ -19,25 +19,26 @@ export const blockContentType = defineType({
           { title: 'Quote', value: 'blockquote' },
         ],
         lists: [{ title: 'Bullet', value: 'bullet' }],
-        marks: {
-          decorators: [
-            { title: 'Strong', value: 'strong' },
-            { title: 'Emphasis', value: 'em' },
-          ],
-          annotations: [
-            {
-              title: 'URL',
-              name:              type: 'object',
-              fields: [
-                {
-                  title: 'URL',
-                  name: 'href',
-                  type: 'url',
-                },
-              ],
-            },
-          ],
+marks: {
+  decorators: [
+    { title: 'Strong', value: 'strong' },
+    { title: 'Emphasis', value: 'em' },
+  ],
+  annotations: [
+    {
+      title: 'URL',
+      name: 'link',
+      type: 'object',
+      fields: [
+        {
+          title: 'URL',
+          name: 'href',
+          type: 'url',
         },
+      ],
+    },
+  ],
+},
       } as any),
     }),
     defineArrayMember({
