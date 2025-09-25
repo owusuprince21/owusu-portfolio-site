@@ -26,18 +26,20 @@ export const postType = defineType({
       } as any),
     }),
     defineField({
-      name: 'mainImage',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        defineField({
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative text',
-        }),
-      ],
+      ...( {
+        name: 'mainImage',
+        type: 'image',
+        options: {
+          hotspot: true,
+        },
+        fields: [
+          {
+            name: 'alt',
+            type: 'string',
+            title: 'Alternative text',
+          },
+        ],
+      } as any),
     }),
     defineField({
       name: 'categories',
