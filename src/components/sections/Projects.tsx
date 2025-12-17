@@ -104,6 +104,21 @@ const MOCK_PROJECTS_ALL: Project[] = [
     created_at: monthsAgo(6),
     updated_at: monthsAgo(6),
   },
+    {
+    id: 'p6',
+    title: 'Trailer Fie',
+    slug: 'trailer-fie',
+    excerpt: 'A modern movie trailer discovery platform',
+    description:
+      'Trailer Fie is a modern web platform for discovering and watching movie trailers. The project focuses on a clean UI, smooth animations, and fast performance. It features a responsive landing page, trailer previews, movie highlights, and engaging call-to-action sections, all built with a strong emphasis on user experience and visual appeal.',
+    image_url: '/images/projects/p6.png',
+    tags: pickTags('Next.js', 'TailwindCSS', 'Framer Motion'),
+    demo_url: 'https://trailer-fie.vercel.app',
+    repo_url: 'https://github.com/owusuprince21',
+    featured: false,
+    created_at: monthsAgo(6),
+    updated_at: monthsAgo(6),
+  },
 ]
 
 
