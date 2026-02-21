@@ -75,10 +75,10 @@ export function Hero() {
                 {/* Image container */}
                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 shadow-2xl">
                   <Image
-                    src="/hero-img.jpg"
+                    src="/hero-img.jpeg"
                     alt="Prince Owusu - Software Developer"
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                     priority
                     sizes="(max-width: 640px) 240px, (max-width: 1024px) 320px, 384px"
                   />

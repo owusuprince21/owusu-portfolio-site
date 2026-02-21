@@ -119,6 +119,22 @@ const MOCK_PROJECTS_ALL: Project[] = [
     created_at: monthsAgo(6),
     updated_at: monthsAgo(6),
   },
+
+      {
+    id: 'p7',
+    title: 'BloomBag GH',
+    slug: 'bloombag-gh',
+    excerpt: 'A modern e-commerce platform for premium beauty products in Ghana',
+    description:
+      'BloomBag GH is a modern e-commerce platform for premium beauty products in Ghana. The project features a clean UI, smooth animations, and fast performance. It includes product listings, shopping cart functionality, user reviews, and a responsive design optimized for mobile and desktop users.',
+    image_url: '/images/projects/p7.png',
+    tags: pickTags('Next.js', 'Django Framework', 'Paystack', 'TailwindCSS'),
+    demo_url: 'https://bloombaggh.com',
+    repo_url: 'https://github.com/owusuprince21',
+    featured: false,
+    created_at: monthsAgo(1),
+    updated_at: monthsAgo(2),
+  },
 ]
 
 
