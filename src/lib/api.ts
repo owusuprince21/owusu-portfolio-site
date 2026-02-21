@@ -1,137 +1,119 @@
-import { groq } from 'next-sanity'
-import {client} from "../lib/sanity/client";
-import { urlFor } from '../lib/sanity/image'
+// src/lib/api.ts
+// No Sanity. No GROQ.
+// This file provides the same function signatures your app already uses,
+// but it reads from a local in-code dataset (you can move it to JSON later).
 
-export interface Tag { id: number | string; name: string; }
+export interface Tag {
+  id: number | string
+  name: string
+}
+
 export interface Project {
-  id: number | string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  description?: string;
-  image_url?: string | null;
-  tags: Tag[];
-  demo_url?: string | null;
-  repo_url?: string | null;
-  featured: boolean;
-  created_at: string;
-  updated_at?: string;
-}
-export interface ProjectsResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Project[];
+  id: number | string
+  title: string
+  slug: string
+  excerpt: string
+  description?: string
+  image_url?: string | null
+  tags: Tag[]
+  demo_url?: string | null
+  repo_url?: string | null
+  featured: boolean
+  created_at: string
+  updated_at?: string
 }
 
-/* ---------- GROQ ---------- */
+export interface ProjectsResponse {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Project[]
+}
+
+export interface ContactMessage {
+  name: string
+  email: string
+  message: string
+}
 
 const PAGE_SIZE = 9
 
-const projectSelection = `
-  _id,
-  title,
-  "slug": slug.current,
-  excerpt,
-  description,
-  mainImage,
-  demo_url,
-  repo_url,
-  featured,
-  _createdAt,
-  _updatedAt,
-  "tags": tags[]->{
-    _id, name
-  }
-`
+// ✅ Replace these sample projects with your real projects.
+// Tip: keep `slug` unique.
+// const PROJECTS: Project[] = [
+//   {
+//     id: "1",
+//     title: "My Portfolio Website",
+//     slug: "my-portfolio-website",
+//     excerpt: "A modern portfolio built with Next.js, Tailwind CSS, and animations.",
+//     description:
+//       "A personal portfolio website showcasing projects, skills, and contact details. Includes responsive UI, animations, and performance optimizations.",
+//     image_url: "/projects/portfolio.jpg",
+//     tags: [{ id: "t1", name: "Next.js" }, { id: "t2", name: "Tailwind" }],
+//     demo_url: "https://example.com",
+//     repo_url: "https://github.com/example/repo",
+//     featured: true,
+//     created_at: "2025-01-10T00:00:00.000Z",
+//     updated_at: "2025-02-01T00:00:00.000Z"
+//   }
+// ]
 
-const listQuery = groq`{
-  "results": *[_type == "project"]
-    | order(featured desc, _createdAt desc)
-    [$offset...$end]{
-      ${projectSelection}
-    },
-  "total": count(*[_type == "project"])
-}`
+// ---------- Helpers ----------
 
-const listFeaturedQuery = groq`*[_type == "project" && featured == true]
-  | order(_createdAt desc){
-    ${projectSelection}
-  }`
-
-const bySlugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
-  ${projectSelection}
-}`
-
-const tagsQuery = groq`*[_type == "tag"]{ _id, name } | order(name asc)`
-
-/* ---------- Mappers ---------- */
-
-function mapProject(p: any): Project {
-  return {
-    id: p._id,
-    title: p.title,
-    slug: p.slug,
-    excerpt: p.excerpt || '',
-    description: p.description || '',
-    image_url: p.mainImage ? urlFor(p.mainImage).width(1200).height(675).fit('crop').url() : null,
-    tags: (p.tags || []).map((t: any) => ({ id: t._id, name: t.name })),
-    demo_url: p.demo_url || null,
-    repo_url: p.repo_url || null,
-    featured: !!p.featured,
-    created_at: p._createdAt,
-    updated_at: p._updatedAt,
-  }
+function normalize(str: string) {
+  return str.trim().toLowerCase()
 }
 
-/* ---------- Public API (same signatures) ---------- */
+function uniqueTagsFromProjects(projects: Project[]): Tag[] {
+  const map = new Map<string, Tag>()
 
-export async function getProjects(featured?: boolean, page = 1): Promise<ProjectsResponse> {
-  if (featured) {
-    const docs = await client.fetch(listFeaturedQuery)
-    const results: Project[] = (docs || []).map(mapProject)
-    return {
-      count: results.length,
-      next: null,
-      previous: null,
-      results,
+  for (const p of projects) {
+    for (const t of p.tags || []) {
+      const key = `${t.id}`
+      if (!map.has(key)) map.set(key, { id: t.id, name: t.name })
     }
   }
 
-  const offset = Math.max(0, (page - 1) * PAGE_SIZE)
-  const end = offset + PAGE_SIZE
-  const data = await client.fetch(listQuery, { offset, end })
+  return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name))
+}
 
-  const total: number = data?.total ?? 0
-  const results: Project[] = (data?.results || []).map(mapProject)
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+function sortProjects(projects: Project[]): Project[] {
+  // Featured first, then newest created_at
+  return [...projects].sort((a, b) => {
+    const fa = a.featured ? 1 : 0
+    const fb = b.featured ? 1 : 0
+    if (fb !== fa) return fb - fa
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  })
+}
+
+function paginate<T>(items: T[], page: number, pageSize: number) {
+  const total = items.length
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const safePage = Math.min(Math.max(1, page), totalPages)
+
+  const start = (safePage - 1) * pageSize
+  const end = start + pageSize
+  const results = items.slice(start, end)
 
   return {
-    count: total,
-    next: page < totalPages ? String(page + 1) : null,
-    previous: page > 1 ? String(page - 1) : null,
-    results,
+    total,
+    totalPages,
+    safePage,
+    results
   }
 }
 
-export async function getProject(slug: string): Promise<Project | null> {
-  const doc = await client.fetch(bySlugQuery, { slug })
-  return doc ? mapProject(doc) : null
-}
+// ---------- Public API (same signatures) ----------
 
-export async function getFeaturedProjects(): Promise<Project[]> {
-  const docs = await client.fetch(listFeaturedQuery)
-  return (docs || []).map(mapProject)
-}
 
-export async function getTags(): Promise<Tag[]> {
-  const docs = await client.fetch(tagsQuery)
-  return (docs || []).map((t: any) => ({ id: t._id, name: t.name }))
-}
-
-/* ---------- Contact (keep noop or route elsewhere) ---------- */
-// You can remove sendContactMessage or wire it to a Route Handler instead.
-export interface ContactMessage { name: string; email: string; message: string; }
+/**
+ * Contact handler:
+ * - If you want emails, wire this to a Next.js Route Handler (e.g. /api/contact)
+ *   and send via Resend, Nodemailer, etc.
+ */
 export async function sendContactMessage(_: ContactMessage) {
-  throw new Error('Contact endpoint not implemented for Sanity. Use a Next.js Route Handler or 3rd-party form.')
+  throw new Error(
+    "Contact endpoint not implemented. Create a Next.js Route Handler at /api/contact."
+  )
 }
