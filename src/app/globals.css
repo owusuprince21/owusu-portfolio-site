@@ -27,6 +27,11 @@ body {
 }
 
 #smooth-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+#smooth-wrapper[data-smooth='true'] {
   overflow: hidden;
 }
 
