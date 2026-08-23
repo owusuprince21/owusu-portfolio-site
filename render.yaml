@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: owusu-portfolio-site
+    runtime: node
+    plan: free
+    region: oregon
+    branch: master
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20.19.0"
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_COFFEE_URL
+        sync: false
+      - key: GUARDIAN_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: CONTACT_TO_EMAIL
+        value: powusu050@gmail.com
+      - key: CONTACT_FROM_EMAIL
+        value: Portfolio Contact <onboarding@resend.dev>

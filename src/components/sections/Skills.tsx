@@ -8,7 +8,6 @@ import {
   SiJavascript,
   SiTypescript,
   SiHtml5,
-  SiCss,
   SiTailwindcss,
   SiNodedotjs,
   SiPython,
@@ -17,9 +16,10 @@ import {
   SiGit,
   SiFirebase,
   SiThreedotjs,
-  SiReactivex,
+  SiExpo,
   SiDotnet,
 } from 'react-icons/si'
+import { FaCss3Alt } from 'react-icons/fa'
 import FadeContent from '@/components/FadeContent'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { CSharpIcon } from '@/components/icons/CSharpIcon'
@@ -40,7 +40,7 @@ export function Skills() {
       { node: <SiJavascript className="text-[#F7DF1E]" size={ICON_SIZE} />, title: 'JavaScript', href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
       { node: <SiTailwindcss className="text-[#06B6D4]" size={ICON_SIZE} />, title: 'Tailwind CSS', href: 'https://tailwindcss.com' },
       { node: <SiHtml5 className="text-[#E34F26]" size={ICON_SIZE} />, title: 'HTML5', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
-      { node: <SiCss className="text-[#1572B6]" size={ICON_SIZE} />, title: 'CSS3', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
+      { node: <FaCss3Alt className="text-[#1572B6]" size={ICON_SIZE} />, title: 'CSS3', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
       { node: <SiNodedotjs className="text-[#339933]" size={ICON_SIZE} />, title: 'Node.js', href: 'https://nodejs.org' },
       { node: <SiDotnet className="text-[#512BD4]" size={ICON_SIZE} />, title: '.NET', href: 'https://dotnet.microsoft.com' },
       { node: <CSharpIcon size={ICON_SIZE} className="text-[#512BD4]" />, title: 'C#', href: 'https://learn.microsoft.com/dotnet/csharp/' },
@@ -50,7 +50,7 @@ export function Skills() {
       { node: <SiGit className="text-[#F05032]" size={ICON_SIZE} />, title: 'Git', href: 'https://git-scm.com' },
       { node: <SiFirebase className="text-[#FFCA28]" size={ICON_SIZE} />, title: 'Firebase', href: 'https://firebase.google.com' },
       { node: <SiThreedotjs className="text-white" size={ICON_SIZE} />, title: 'Three.js', href: 'https://threejs.org' },
-      { node: <SiReactivex className="text-[#61DAFB]" size={ICON_SIZE} />, title: 'React Native', href: 'https://reactnative.dev' },
+      { node: <SiExpo className="text-white" size={ICON_SIZE} />, title: 'Expo / React Native', href: 'https://reactnative.dev' },
     ],
     []
   )
