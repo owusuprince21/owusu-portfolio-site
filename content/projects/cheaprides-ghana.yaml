@@ -1,0 +1,14 @@
+title: CheapRides Ghana
+excerpt: Discover premium vehicles with transparent pricing
+description: >-
+  A car auction platform offering a wide range of vehicles with real-time availability and
+  booking. Features include user reviews, pricing transparency, and a seamless reservation process.
+image_url: public/images/projects/p3.png
+tags:
+  - Next.js
+  - Django
+  - TailwindCSS
+demo_url: https://cheaprides.com/
+repo_url: https://github.com/owusuprince21
+featured: true
+created_at: 2025-05-12

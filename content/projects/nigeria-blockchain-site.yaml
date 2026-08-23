@@ -1,0 +1,14 @@
+title: Nigeria Blockchain Hub
+excerpt: Educational and community hub for Nigeria's blockchain ecosystem.
+description: >-
+  Built as an informational portal for blockchain enthusiasts in Nigeria. Includes resources,
+  community events, blog posts, and integration with learning modules.
+image_url: public/images/projects/p2.png
+tags:
+  - Next.js
+  - TailwindCSS
+  - Framer Motion
+demo_url: https://blockchain-week-v2.vercel.app/
+repo_url: https://github.com/owusuprince21
+featured: false
+created_at: 2025-06-12

@@ -1,0 +1,16 @@
+title: BloomBag GH
+excerpt: A modern e-commerce platform for premium beauty products in Ghana
+description: >-
+  BloomBag GH is a modern e-commerce platform for premium beauty products in Ghana. Features
+  product listings, shopping cart functionality, user reviews, and a responsive design optimized
+  for mobile and desktop users.
+image_url: public/images/projects/p7.png
+tags:
+  - Next.js
+  - Django Framework
+  - Paystack
+  - TailwindCSS
+demo_url: https://bloombaggh.com
+repo_url: https://github.com/owusuprince21
+featured: false
+created_at: 2025-07-12

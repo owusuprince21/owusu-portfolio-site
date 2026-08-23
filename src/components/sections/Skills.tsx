@@ -1,15 +1,15 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
+import { useMemo } from 'react'
 import {
   SiReact,
   SiNextdotjs,
   SiJavascript,
   SiTypescript,
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiTailwindcss,
-  SiReactquery,
   SiNodedotjs,
   SiPython,
   SiDjango,
@@ -18,104 +18,76 @@ import {
   SiFirebase,
   SiThreedotjs,
   SiReactivex,
+  SiDotnet,
 } from 'react-icons/si'
+import FadeContent from '@/components/FadeContent'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+import { CSharpIcon } from '@/components/icons/CSharpIcon'
+
+const LogoLoop = dynamic(() => import('@/components/LogoLoop'), {
+  ssr: false,
+  loading: () => <div className="h-[120px] animate-pulse rounded-xl bg-white/5" />,
+})
+
+const ICON_SIZE = 48
 
 export function Skills() {
-  const skills = [
-    { name: 'React', icon: <SiReact size={36} />, category: 'Frontend' },
-    { name: 'Next.js', icon: <SiNextdotjs size={36} />, category: 'Frontend' },
-    { name: 'JavaScript', icon: <SiJavascript size={36} />, category: 'Language' },
-    { name: 'TypeScript', icon: <SiTypescript size={36} />, category: 'Language' },
-    { name: 'HTML5', icon: <SiHtml5 size={36} />, category: 'Frontend' },
-    { name: 'CSS3', icon: <SiCss3 size={36} />, category: 'Frontend' },
-    { name: 'Tailwind CSS', icon: <SiTailwindcss size={36} />, category: 'Frontend' },
-    { name: 'React Native', icon: <SiReactivex size={36} />, category: 'Mobile' },
-    { name: 'Node.js', icon: <SiNodedotjs size={36} />, category: 'Backend' },
-    { name: 'Python', icon: <SiPython size={36} />, category: 'Language' },
-    { name: 'Django', icon: <SiDjango size={36} />, category: 'Backend' },
-    { name: 'PostgreSQL', icon: <SiPostgresql size={36} />, category: 'Database' },
-    { name: 'Git', icon: <SiGit size={36} />, category: 'Tools' },
-    { name: 'Firebase', icon: <SiFirebase size={36} />, category: 'Backend' },
-    { name: 'Three.js', icon: <SiThreedotjs size={36} />, category: 'Frontend' },
-  ]
+  const techLogos = useMemo(
+    () => [
+      { node: <SiReact className="text-[#61DAFB]" size={ICON_SIZE} />, title: 'React', href: 'https://react.dev' },
+      { node: <SiNextdotjs className="text-white" size={ICON_SIZE} />, title: 'Next.js', href: 'https://nextjs.org' },
+      { node: <SiTypescript className="text-[#3178C6]" size={ICON_SIZE} />, title: 'TypeScript', href: 'https://www.typescriptlang.org' },
+      { node: <SiJavascript className="text-[#F7DF1E]" size={ICON_SIZE} />, title: 'JavaScript', href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
+      { node: <SiTailwindcss className="text-[#06B6D4]" size={ICON_SIZE} />, title: 'Tailwind CSS', href: 'https://tailwindcss.com' },
+      { node: <SiHtml5 className="text-[#E34F26]" size={ICON_SIZE} />, title: 'HTML5', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
+      { node: <SiCss className="text-[#1572B6]" size={ICON_SIZE} />, title: 'CSS3', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
+      { node: <SiNodedotjs className="text-[#339933]" size={ICON_SIZE} />, title: 'Node.js', href: 'https://nodejs.org' },
+      { node: <SiDotnet className="text-[#512BD4]" size={ICON_SIZE} />, title: '.NET', href: 'https://dotnet.microsoft.com' },
+      { node: <CSharpIcon size={ICON_SIZE} className="text-[#512BD4]" />, title: 'C#', href: 'https://learn.microsoft.com/dotnet/csharp/' },
+      { node: <SiPython className="text-[#3776AB]" size={ICON_SIZE} />, title: 'Python', href: 'https://www.python.org' },
+      { node: <SiDjango className="text-[#092E20]" size={ICON_SIZE} />, title: 'Django', href: 'https://www.djangoproject.com' },
+      { node: <SiPostgresql className="text-[#4169E1]" size={ICON_SIZE} />, title: 'PostgreSQL', href: 'https://www.postgresql.org' },
+      { node: <SiGit className="text-[#F05032]" size={ICON_SIZE} />, title: 'Git', href: 'https://git-scm.com' },
+      { node: <SiFirebase className="text-[#FFCA28]" size={ICON_SIZE} />, title: 'Firebase', href: 'https://firebase.google.com' },
+      { node: <SiThreedotjs className="text-white" size={ICON_SIZE} />, title: 'Three.js', href: 'https://threejs.org' },
+      { node: <SiReactivex className="text-[#61DAFB]" size={ICON_SIZE} />, title: 'React Native', href: 'https://reactnative.dev' },
+    ],
+    []
+  )
 
   return (
-    <section id="skills" className="py-20 section-padding">
+    <section id="skills" className="scroll-section py-20 section-padding">
       <div className="max-w-7xl mx-auto text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl lg:text-4xl font-bold mb-4"
-        >
-          Skills & <span className="gradient-text">Technologies</span>
-        </motion.h2>
-        <p className="text-lg text-dark-muted max-w-2xl mx-auto mb-16">
-          Here are the technologies and tools I work with to bring ideas to life.
-        </p>
+        <SectionHeading
+          title="Skills &"
+          highlight="Technologies"
+          subtitle="Here are the technologies and tools I work with to bring ideas to life."
+        />
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6"
-        >
-          {skills.map((skill, i) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: i * 0.05 }}
-              whileHover={{
-                y: -8,
-                scale: 1.05,
-                transition: { type: 'spring', stiffness: 300, damping: 20 },
-              }}
-              className="group"
-            >
-              <div className="glass p-4 rounded-xl h-full flex flex-col items-center justify-center text-center transition-all duration-300 group-hover:border-primary-500/30 relative overflow-hidden">
-                {/* Background glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <FadeContent duration={700} className="mt-4">
+          <div className="relative h-[100px] overflow-hidden">
+            <LogoLoop
+              logos={techLogos}
+              speed={80}
+              direction="left"
+              logoHeight={44}
+              gap={52}
+              hoverSpeed={0}
+              scaleOnHover
+              fadeOut
+              fadeOutColor="#0a0a0a"
+              ariaLabel="Technologies and tools"
+              className="py-3"
+            />
+          </div>
+        </FadeContent>
 
-                {/* Skill Icon */}
-                <div className="relative w-12 h-12 mb-3 flex items-center justify-center text-2xl">
-                  {skill.icon}
-                </div>
-
-                {/* Skill Name */}
-                <h3 className="text-sm font-medium text-dark-text group-hover:text-primary-400 transition-colors duration-200 relative z-10">
-                  {skill.name}
-                </h3>
-
-                {/* Category */}
-                <span className="text-xs text-dark-muted mt-1 opacity-60 group-hover:opacity-100 transition-opacity duration-200 relative z-10">
-                  {skill.category}
-                </span>
-
-                {/* Shine effect */}
-                <motion.div
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: '100%' }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 text-dark-muted max-w-3xl mx-auto"
-        >
-          I&apos;m always learning and staying up-to-date with the latest technologies. My goal is to use the right tool for each project to deliver the best possible results.
-        </motion.p>
+        <FadeContent duration={700} delay={300} className="mt-16">
+          <p className="text-dark-muted max-w-3xl mx-auto">
+            I&apos;m always learning and staying up-to-date with the latest technologies. My goal is to
+            use the right tool for each project to deliver the best possible results.
+          </p>
+        </FadeContent>
       </div>
     </section>
   )

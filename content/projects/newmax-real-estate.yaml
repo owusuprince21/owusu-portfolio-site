@@ -1,0 +1,13 @@
+title: NewMax Real Estate
+excerpt: Modern apartments with skyline views and high-end amenities.
+description: >-
+  Landing page for NewMax Real Estate featuring property highlights, pricing, FAQs, and strong
+  call-to-action blocks. Designed with performance and modern animations in mind.
+image_url: public/images/projects/p5.png
+tags:
+  - Next.js
+  - TailwindCSS
+  - Framer Motion
+repo_url: https://github.com/owusuprince21
+featured: false
+created_at: 2025-02-12

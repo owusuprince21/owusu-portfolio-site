@@ -11,14 +11,57 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body {
   background: #0a0a0a;
   color: #e4e4e7;
   line-height: 1.6;
-  overflow-x: hidden;
+}
+
+#smooth-wrapper {
+  overflow: hidden;
+}
+
+#smooth-content {
+  overflow: visible;
+  width: 100%;
+}
+
+/* Prevent iOS Safari auto-zoom on focus (requires >= 16px) */
+#contact input,
+#contact textarea,
+#contact select {
+  font-size: 16px;
+}
+
+.fade-content {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.fade-content-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-content {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* Glass morphism utility */
@@ -42,8 +85,88 @@ body {
     background-clip: text;
   }
 
+  /* GSAP SplitText chars must not use gradient-text on the parent — apply per-char instead */
+  .gradient-text-chars.split-parent .split-char {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   .section-padding {
     @apply px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Lightweight CSS hero background (no WebGL) */
+.hero-bg__stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 80px 120px, rgba(147, 197, 253, 0.35), transparent),
+    radial-gradient(1.5px 1.5px at 160px 80px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 240px 200px, rgba(196, 181, 253, 0.35), transparent),
+    radial-gradient(1px 1px at 320px 50px, rgba(255, 255, 255, 0.25), transparent);
+  background-size: 350px 350px;
+  animation: hero-stars-drift 90s linear infinite;
+}
+
+.hero-bg__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(37, 99, 235, 0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(124, 58, 237, 0.12), transparent);
+}
+
+@keyframes hero-stars-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-350px, -350px, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg__stars {
+    animation: none;
+  }
+}
+
+/* Hero 7 pink glow accent bar */
+.hero7-glow-bar {
+  position: relative;
+  height: 3px;
+  width: min(100%, 14rem);
+  margin-inline: auto;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, #ec4899, #f472b6, #e879f9, transparent);
+  box-shadow:
+    0 0 18px rgba(236, 72, 153, 0.65),
+    0 0 36px rgba(244, 114, 182, 0.35);
+  overflow: hidden;
+}
+
+.hero7-glow-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.85) 50%, transparent 100%);
+  animation: hero7-glow-sweep 2.8s ease-in-out infinite;
+}
+
+@keyframes hero7-glow-sweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+
+@media (min-width: 1024px) {
+  .hero7-glow-bar {
+    margin-inline: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero7-glow-bar::after {
+    animation: none;
   }
 }
 

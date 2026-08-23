@@ -1,0 +1,14 @@
+title: Marafiq Real Estate
+excerpt: Real estate showcase platform for modern property listings in Nigeria.
+description: >-
+  Dynamic property listing site with search, filters, and image galleries. Built with Next.js
+  for fast performance and easy content updates by real estate agents.
+image_url: public/images/projects/p4.png
+tags:
+  - Next.js
+  - TailwindCSS
+  - CMS
+demo_url: https://marafiq-www.vercel.app/
+repo_url: https://github.com/owusuprince21
+featured: false
+created_at: 2025-04-12

@@ -1,20 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: { 
+  images: {
     unoptimized: true,
-    domains: ['images.pexels.com', 'localhost', '127.0.0.1'],
-     remotePatterns: [
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.pexels.com' },
+      { protocol: 'https', hostname: 'localhost' },
+      { protocol: 'https', hostname: '127.0.0.1' },
       { protocol: 'https', hostname: 'i.guim.co.uk' },
       { protocol: 'https', hostname: 'media.guim.co.uk' },
-      { protocol: 'https', hostname: 'cdn.sanity.io' },
     ],
   },
+  serverExternalPackages: ['@keystatic/core', '@keystatic/next'],
   experimental: {
-    optimizePackageImports: ['framer-motion', 'three']
-  }
-};
+    optimizePackageImports: [
+      'framer-motion',
+      'react-icons',
+      'lucide-react',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+    ],
+  },
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

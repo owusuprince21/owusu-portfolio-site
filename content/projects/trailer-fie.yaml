@@ -1,0 +1,15 @@
+title: Trailer Fie
+excerpt: A modern movie trailer discovery platform
+description: >-
+  Trailer Fie is a modern web platform for discovering and watching movie trailers. The project
+  focuses on a clean UI, smooth animations, and fast performance with trailer previews, movie
+  highlights, and engaging call-to-action sections.
+image_url: public/images/projects/p6.png
+tags:
+  - Next.js
+  - TailwindCSS
+  - Framer Motion
+demo_url: https://trailer-fie.vercel.app
+repo_url: https://github.com/owusuprince21
+featured: false
+created_at: 2025-02-12

@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# local env files (extra)
+env.local
+.env
+
+# package manager store
+.pnpm-store/

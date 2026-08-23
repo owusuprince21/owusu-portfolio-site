@@ -1,0 +1,14 @@
+title: Nigeria W3N Conference
+excerpt: Official event site for the W3N Conference in Nigeria with agenda, speakers, and ticketing.
+description: >-
+  A responsive conference website built with Next.js and TailwindCSS. Features include agenda
+  scheduling, speaker bios, sponsor sections, and online ticket booking integration.
+image_url: public/images/projects/p1.png
+tags:
+  - Next.js
+  - TypeScript
+  - TailwindCSS
+demo_url: https://w3ncon.vercel.app/
+repo_url: https://github.com/owusuprince21
+featured: true
+created_at: 2025-07-12

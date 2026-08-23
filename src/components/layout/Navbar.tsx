@@ -1,16 +1,38 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import GooeyNav from '@/components/GooeyNav'
+import ElectricBorder from '@/components/ElectricBorder'
+import { scrollToWithSmoother } from '@/components/ScrollSmootherProvider'
+
+const navLinks = [
+  { href: '#home', label: 'Home' },
+  { href: '#about', label: 'About' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#skills', label: 'Skills' },
+  { href: '/blog', label: 'News' },
+]
+
+function getActiveIndexFromPath(pathname: string) {
+  if (pathname.startsWith('/blog')) return 4
+  return 0
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
   const pathname = usePathname()
   const router = useRouter()
+
+  const gooeyItems = useMemo(
+    () => navLinks.map((link) => ({ label: link.label, href: link.href })),
+    []
+  )
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
@@ -18,28 +40,32 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navLinks = [
-    { href: '#home', label: 'Home' },
-    { href: '#about', label: 'About' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#skills', label: 'Skills' },
-    { href: '/blog', label: 'World News' }
-  ]
+  useEffect(() => {
+    setActiveIndex(getActiveIndexFromPath(pathname))
+  }, [pathname])
 
   const scrollToSection = (href: string) => {
     setIsMobileMenuOpen(false)
 
+    if (href.startsWith('/#')) {
+      router.push(href)
+      return
+    }
+
     if (href.startsWith('#')) {
       if (pathname !== '/') {
-        // navigate to home first, then scroll
         router.push(`/${href}`)
       } else {
-        const el = document.querySelector(href)
-        if (el) el.scrollIntoView({ behavior: 'smooth' })
+        scrollToWithSmoother(href, 72)
       }
     } else {
       router.push(href)
     }
+  }
+
+  const isActive = (href: string) => {
+    if (href.startsWith('#')) return pathname === '/'
+    return pathname === href || pathname.startsWith(`${href}/`)
   }
 
   return (
@@ -52,45 +78,51 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <motion.div whileHover={{ scale: 1.05 }} className="flex-shrink-0">
-            <Link href="/" onClick={() => scrollToSection('#home')}>
+            <Link
+              href="/"
+              onClick={() => {
+                setActiveIndex(0)
+                scrollToSection('#home')
+              }}
+            >
               <span className="text-xl font-bold gradient-text">OWUSU</span>
             </Link>
           </motion.div>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center justify-center flex-1">
-            <div className="flex items-center space-x-8">
-              {navLinks.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => scrollToSection(link.href)}
-                  className="text-dark-text hover:text-primary-500 transition-colors duration-200 focus-outline"
-                >
-                  {link.label}
-                </button>
-              ))}
-            </div>
+          <div className="hidden md:flex items-center justify-center flex-1 px-2 lg:px-4">
+            <GooeyNav
+              items={gooeyItems}
+              activeIndex={activeIndex}
+              onActiveIndexChange={setActiveIndex}
+              onItemClick={(item) => scrollToSection(item.href)}
+              particleCount={15}
+              particleDistances={[90, 10]}
+              particleR={100}
+              animationTime={600}
+              timeVariance={300}
+              colors={[1, 2, 3, 1, 2, 3, 1, 4]}
+            />
           </div>
 
-          {/* Contact Button */}
           <div className="hidden md:block">
-            <motion.button
-              onClick={() => scrollToSection('#contact')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-full transition-colors duration-200 focus-outline"
-            >
-              Contact Me
-            </motion.button>
+            <ElectricBorder color="#60a5fa" speed={0.9} chaos={0.05} borderRadius={999}>
+              <motion.button
+                onClick={() => scrollToSection(pathname === '/' ? '#contact' : '/#contact')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-full transition-colors duration-200 focus-outline text-sm lg:text-base"
+              >
+                Contact Me
+              </motion.button>
+            </ElectricBorder>
           </div>
 
-          {/* Mobile menu */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-dark-text hover:text-primary-500 focus-outline"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -98,12 +130,11 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       <motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{
           opacity: isMobileMenuOpen ? 1 : 0,
-          height: isMobileMenuOpen ? 'auto' : 0
+          height: isMobileMenuOpen ? 'auto' : 0,
         }}
         className="md:hidden overflow-hidden glass border-t border-white/10"
       >
@@ -112,17 +143,23 @@ export function Navbar() {
             <button
               key={link.href}
               onClick={() => scrollToSection(link.href)}
-              className="block px-3 py-2 text-dark-text hover:text-primary-500 transition-colors duration-200 w-full text-left focus-outline"
+              className={`block px-3 py-2 transition-colors duration-200 w-full text-left focus-outline ${
+                isActive(link.href)
+                  ? 'text-primary-400 font-medium'
+                  : 'text-dark-text hover:text-primary-500'
+              }`}
             >
               {link.label}
             </button>
           ))}
-          <button
-            onClick={() => scrollToSection('#contact')}
-            className="block px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors duration-200 w-full text-left focus-outline"
-          >
-            Contact Me
-          </button>
+          <ElectricBorder color="#60a5fa" speed={0.9} chaos={0.05} borderRadius={12} className="w-full">
+            <button
+              onClick={() => scrollToSection(pathname === '/' ? '#contact' : '/#contact')}
+              className="block w-full rounded-lg bg-primary-600 px-3 py-2 text-left text-white transition-colors duration-200 hover:bg-primary-700 focus-outline"
+            >
+              Contact Me
+            </button>
+          </ElectricBorder>
         </div>
       </motion.div>
     </motion.nav>

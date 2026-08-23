@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { Github, Linkedin, Twitter, Mail, ArrowUp } from 'lucide-react'
 import { FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import ElectricBorder from '@/components/ElectricBorder'
+import { ScrollSmoother } from 'gsap/ScrollSmoother'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -37,6 +39,11 @@ export function Footer() {
   ]
 
   const scrollToTop = () => {
+    const smoother = ScrollSmoother.get()
+    if (smoother) {
+      smoother.scrollTo(0, true)
+      return
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -52,21 +59,30 @@ export function Footer() {
           </div>
 
           {/* Center - Social Links */}
-          <div className="flex gap-6 mb-4 md:mb-0">
-            {socialLinks.map((social) => {
+          <div className="mb-4 flex gap-4 md:mb-0">
+            {socialLinks.map((social, index) => {
               const Icon = social.icon
+              const iconColors = ['#60a5fa', '#e879f9', '#a78bfa', '#34d399', '#f472b6']
               return (
-                <motion.a
+                <ElectricBorder
                   key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -2 }}
-                  className="text-dark-muted hover:text-primary-400 transition-colors duration-200 focus-outline"
-                  aria-label={social.label}
+                  color={iconColors[index % iconColors.length]}
+                  speed={0.85}
+                  chaos={0.05}
+                  borderRadius={999}
                 >
-                  <Icon size={20} />
-                </motion.a>
+                  <motion.a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -2, scale: 1.08 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="focus-outline flex h-10 w-10 items-center justify-center rounded-full glass-light text-dark-muted transition-colors duration-200 hover:bg-pink-500/20 hover:text-primary-400"
+                    aria-label={social.label}
+                  >
+                    <Icon size={18} />
+                  </motion.a>
+                </ElectricBorder>
               )
             })}
           </div>
