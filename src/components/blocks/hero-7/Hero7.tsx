@@ -137,12 +137,15 @@ export function Hero7() {
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12 lg:items-start">
           <div className="text-center lg:pt-6 lg:text-left">
-            <BlurText
-              text="Hi, I'm"
-              delay={120}
-              animateBy="words"
-              className="mb-2 justify-center text-4xl font-bold text-dark-text sm:text-5xl lg:justify-start lg:text-6xl"
-            />
+            <p className="mb-2 text-4xl font-bold text-dark-text sm:hidden">Hi, I&apos;m</p>
+            <div className="hidden sm:block">
+              <BlurText
+                text="Hi, I'm"
+                delay={120}
+                animateBy="words"
+                className="mb-2 justify-center text-4xl font-bold text-dark-text sm:text-5xl lg:justify-start lg:text-6xl"
+              />
+            </div>
 
             <h1 className="mb-4">
               <span className="text-4xl font-bold gradient-text sm:hidden">Prince Owusu</span>
