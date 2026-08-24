@@ -31,6 +31,16 @@ const buildKeyframes = (
   return keyframes;
 };
 
+/**
+ * iOS Safari renders `filter: blur()` as permanently invisible on elements
+ * with `-webkit-text-fill-color: transparent` (gradient text).
+ */
+function isIOSSafari(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent;
+  return /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
+}
+
 const BlurText: React.FC<BlurTextProps> = ({
   text = '',
   delay = 200,
@@ -49,6 +59,13 @@ const BlurText: React.FC<BlurTextProps> = ({
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
 
+  // On iOS Safari, skip blur filter because it breaks gradient text rendering
+  const [skipBlur, setSkipBlur] = useState(false);
+
+  useEffect(() => {
+    setSkipBlur(isIOSSafari());
+  }, []);
+
   useEffect(() => {
     if (!ref.current) return;
 
@@ -64,33 +81,49 @@ const BlurText: React.FC<BlurTextProps> = ({
       { threshold, rootMargin }
     );
 
-    // Defer observe so elements already in viewport at mount still fire
-    const raf = requestAnimationFrame(() => {
-      observer.observe(el);
-    });
+    // Double-defer: setTimeout + rAF ensures iOS Safari has completed layout
+    const timer = setTimeout(() => {
+      requestAnimationFrame(() => {
+        if (el) observer.observe(el);
+      });
+    }, 50);
+
+    // Fallback: if observer hasn't fired after 1.5s, force show
+    const fallback = setTimeout(() => {
+      setInView(true);
+    }, 1500);
 
     return () => {
-      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      clearTimeout(fallback);
       observer.disconnect();
     };
   }, [threshold, rootMargin]);
 
-  const defaultFrom = useMemo(
-    () =>
-      direction === 'top' ? { filter: 'blur(10px)', opacity: 0, y: -50 } : { filter: 'blur(10px)', opacity: 0, y: 50 },
-    [direction]
+  const defaultFrom: Record<string, string | number> = useMemo(
+    () => {
+      const base: Record<string, string | number> = skipBlur
+        ? { opacity: 0, y: direction === 'top' ? -30 : 30 }
+        : { filter: 'blur(10px)', opacity: 0, y: direction === 'top' ? -50 : 50 };
+      return base;
+    },
+    [direction, skipBlur]
   );
 
-  const defaultTo = useMemo(
-    () => [
-      {
-        filter: 'blur(5px)',
-        opacity: 0.5,
-        y: direction === 'top' ? 5 : -5
-      },
-      { filter: 'blur(0px)', opacity: 1, y: 0 }
-    ],
-    [direction]
+  const defaultTo: Array<Record<string, string | number>> = useMemo(
+    () => {
+      if (skipBlur) {
+        return [
+          { opacity: 0.5, y: direction === 'top' ? 3 : -3 } as Record<string, string | number>,
+          { opacity: 1, y: 0 } as Record<string, string | number>,
+        ];
+      }
+      return [
+        { filter: 'blur(5px)', opacity: 0.5, y: direction === 'top' ? 5 : -5 } as Record<string, string | number>,
+        { filter: 'blur(0px)', opacity: 1, y: 0 } as Record<string, string | number>,
+      ];
+    },
+    [direction, skipBlur]
   );
 
   const fromSnapshot = animationFrom ?? defaultFrom;
@@ -121,7 +154,7 @@ const BlurText: React.FC<BlurTextProps> = ({
             onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
             style={{
               display: 'inline-block',
-              willChange: 'transform, filter, opacity'
+              willChange: 'transform, opacity'
             }}
           >
             {segment === ' ' ? '\u00A0' : segment}
