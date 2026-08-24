@@ -145,13 +145,16 @@ export function Hero7() {
             />
 
             <h1 className="mb-4">
-              <BlurText
-                text="Prince Owusu"
-                delay={90}
-                animateBy="words"
-                direction="bottom"
-                className="justify-center text-4xl font-bold gradient-text sm:text-5xl lg:justify-start lg:text-6xl"
-              />
+              <span className="text-4xl font-bold gradient-text sm:hidden">Prince Owusu</span>
+              <span className="hidden sm:block">
+                <BlurText
+                  text="Prince Owusu"
+                  delay={90}
+                  animateBy="words"
+                  direction="bottom"
+                  className="justify-center text-4xl font-bold gradient-text sm:text-5xl lg:justify-start lg:text-6xl"
+                />
+              </span>
             </h1>
 
             <div className="hero7-glow-bar mb-6" aria-hidden />
