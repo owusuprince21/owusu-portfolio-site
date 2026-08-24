@@ -51,17 +51,28 @@ const BlurText: React.FC<BlurTextProps> = ({
 
   useEffect(() => {
     if (!ref.current) return;
+
+    const el = ref.current;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true);
-          observer.unobserve(ref.current as Element);
+          observer.unobserve(el);
         }
       },
       { threshold, rootMargin }
     );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
+
+    // Defer observe so elements already in viewport at mount still fire
+    const raf = requestAnimationFrame(() => {
+      observer.observe(el);
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+    };
   }, [threshold, rootMargin]);
 
   const defaultFrom = useMemo(
