@@ -33,7 +33,7 @@ export function Footer() {
     },
     {
       icon: FaWhatsapp,
-      href: 'https://wa.me/+233547273952',
+      href: 'https://wa.me/+447564452789',
       label: 'WhatsApp'
     }
   ]
